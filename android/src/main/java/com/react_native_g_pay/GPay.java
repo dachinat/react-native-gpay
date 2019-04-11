@@ -86,6 +86,26 @@ public class GPay extends ReactContextBaseJavaModule {
      * href="https://developers.google.com/pay/api/android/reference/object#PaymentMethodTokenizationSpecification">PaymentMethodTokenizationSpecification</a>
      */
     private static JSONObject getTokenizationSpecification(ReadableMap gateway) throws JSONException {
+       if (gateway.hasKey("publicKey") && gateway.hasKey("protocolVersion")) {
+           return buildDirectIntegration(gateway);
+       }
+
+        return buildGatewayIntegration(gateway);
+    }
+
+    private static JSONObject buildDirectIntegration(ReadableMap gateway) throws JSONException {
+        JSONObject tokenizationSpecification = new JSONObject();
+        tokenizationSpecification.put("type", "DIRECT");
+        tokenizationSpecification.put(
+                "parameters",
+                new JSONObject()
+                        .put("protocolVersion", gateway.getString("protocolVersion"))
+                        .put("publicKey", gateway.getString("publicKey")));
+
+        return tokenizationSpecification;
+    }
+
+    private static JSONObject buildGatewayIntegration(ReadableMap gateway) throws JSONException {
         JSONObject tokenizationSpecification = new JSONObject();
         tokenizationSpecification.put("type", "PAYMENT_GATEWAY");
         switch (gateway.getString("name").toLowerCase()) {
@@ -312,11 +332,8 @@ public class GPay extends ReactContextBaseJavaModule {
                                     try {
                                         JSONObject paymentMethodData =
                                                 paymentDataJson.getJSONObject("paymentMethodData");
-                                        String token = paymentMethodData
-                                                .getJSONObject("tokenizationData").getString("token");
-                                        Log.v("Token : ", token);
                                         Log.v("Response", paymentMethodData.toString());
-                                        mRequestPaymentPromise.resolve(token);
+                                        mRequestPaymentPromise.resolve(paymentMethodData.toString());
                                     } catch (JSONException e) {
                                         mRequestPaymentPromise.reject(E_PAYMENT_DATA, e.getMessage());
                                     }
