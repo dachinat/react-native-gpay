@@ -1,0 +1,18 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
+
+    lintOptions {
+       warning 'InvalidPackage'
+    }
+}
+
+dependencies {
+    compile 'com.facebook.react:react-native:+'
+    compile 'com.google.android.gms:play-services-wallet:16.0.1'
+    compile 'com.android.support:support-v4:23.0.1'
+}

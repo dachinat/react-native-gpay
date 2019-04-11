@@ -1,0 +1,12 @@
+{
+  "name": "react-native-gpay",
+  "version": "0.0.1",
+  "description": "Forked from JadavChirag/react-native-GPay",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dachinat/react-native-gpay.git"
+  },
+  "author": "chiragjadav <chiragjadav237@gmail.com>",
+  "license": "MIT"
+}
